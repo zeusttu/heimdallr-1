@@ -11,7 +11,7 @@ end
 
 bot.member_join do |event|
   msg = <<~TEXT.strip
-    :postal_horn: Greetings and welcome, #{event.user.display_name}.
+    :postal_horn: Greetings and welcome, #{event.user.mention}.
     Please, tell our moderators what your level of Danish is so that we may tag you accordingly.
     If you wish to be notified for any upcoming lessons, you can also get a tag granted for that.
   TEXT
