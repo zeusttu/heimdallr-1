@@ -23,7 +23,7 @@ end
 
 bot.member_leave do |event|
   msg = <<~TEXT.strip
-    :rainbow: Farewell, #{event.user.display_name}. As brave as you may feel, it is dangerous beyond these halls!
+    :rainbow: Farewell, #{event.user.username}. As brave as you may feel, it is dangerous beyond these halls!
   TEXT
   event.server.system_channel.send_message msg
 end
