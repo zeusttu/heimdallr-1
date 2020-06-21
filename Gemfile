@@ -1,11 +1,11 @@
-# frozen_string_literal: true
+source "https://rubygems.org"
 
-source 'https://rubygems.org'
+# Specify your gem's dependencies in heimdallr.gemspec
+gemspec
 
-gem 'reek'
-gem 'rubocop'
-gem 'solargraph'
+gem "rake", "~> 12.0"
+gem "rspec", "~> 3.0"
 
-gem 'discordrb',
-    git: 'https://github.com/discordrb/discordrb.git',
-    branch: 'master'
+gem "discordrb",
+  git: "https://github.com/discordrb/discordrb.git",
+  branch: "master"
