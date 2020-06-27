@@ -5,7 +5,7 @@ require "discordrb"
 module Heimdallr
   bot = Discordrb::Commands::CommandBot.new token: ENV["DISCORD_BOT_TOKEN"], prefix: ","
 
-  bot.command :ping do |event|
+  bot.command(:ping, description: "Check if bot is responsive.", usage: "ping") do |event|
     "pong!"
   end
 
