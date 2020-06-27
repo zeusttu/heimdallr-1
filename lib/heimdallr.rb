@@ -3,10 +3,10 @@ require "heimdallr/version"
 require "discordrb"
 
 module Heimdallr
-  bot = Discordrb::Bot.new token: ENV["DISCORD_BOT_TOKEN"]
+  bot = Discordrb::Commands::CommandBot.new token: ENV["DISCORD_BOT_TOKEN"], prefix: ","
 
-  bot.message(content: ",ping") do |event|
-    event.respond "pong!"
+  bot.command :ping do |event|
+    "pong!"
   end
 
   bot.member_join do |event|
