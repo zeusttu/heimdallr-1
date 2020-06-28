@@ -22,4 +22,4 @@ RUN chown -R $USERNAME .
 
 USER $USERNAME
 
-ENTRYPOINT ["/usr/local/bin/bundle", "exec", "bot.rb"]
+ENTRYPOINT ["/usr/local/bin/bundle", "exec", "lib/heimdallr.rb"]
