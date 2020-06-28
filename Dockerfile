@@ -14,6 +14,8 @@ RUN bundle config --global frozen 1
 WORKDIR /usr/src/app
 
 COPY . .
+RUN bundle config set deployment 'true'
+RUN bundle config set without 'development test'
 RUN bundle install
 
 RUN chown -R $USERNAME .
