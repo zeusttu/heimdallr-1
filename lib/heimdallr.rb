@@ -47,5 +47,9 @@ module Heimdallr
     event.server.system_channel.send_message msg
   end
 
+  bot.message(start_with: "t!") do |event|
+    event.respond "I'm terribly sorry, we don't have Tatsumaki here. Try `,help`."
+  end
+
   bot.run
 end
