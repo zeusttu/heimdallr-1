@@ -36,10 +36,8 @@ module Heimdallr
       Please, tell our moderators what your level of Danish is so that we may tag you accordingly.
       If you wish to be notified for any upcoming lessons, you can also get a tag granted for that.
     TEXT
-    event.user.await(:"welcome_#{event.user.id}") do |welcome_event|
-      sleep 10
-      welcome_event.server.system_channel.send_message msg
-    end
+    sleep 10
+    event.server.system_channel.send_message msg
   end
 
   bot.member_leave do |event|
