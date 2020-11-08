@@ -5,7 +5,14 @@ gemspec
 
 gem "rake", "~> 12.0"
 gem "rspec", "~> 3.0"
+gem "pry"
 
 gem "discordrb",
-  git: "https://github.com/discordrb/discordrb.git",
-  branch: "master"
+  git: "https://github.com/swarley/discordrb.git",
+  branch: "next"
+
+group :development do
+  gem "reek"
+  gem "solargraph"
+  gem "standardrb"
+end
