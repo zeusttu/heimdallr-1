@@ -168,5 +168,59 @@ module Heimdallr
     end
   end
 
+  bot.command(
+    :startec,
+    description: "Start an exquisite corpse.",
+    usage: ",startec <name> <participant1> <participant2> ..."
+  ) do |event|
+    _command, name, *participants = event.content.split
+    ec = ExquisiteCorpse.new event.server, name
+    ec.start participants
+    ec.register bot
+    "Started dxquisite corpse '#{name}'."
+  end
+
+  bot.command(
+    :proceedec,
+    description:
+      "Finish the writing phase of an exquisite corpse and proceed to the edit phase.",
+    usage: ",proceedec <name>"
+  ) do |event|
+    _command, name = event.content.split
+    ExquisiteCorpse.all(event.server)[name].enter_editing_phase
+    "Moved exquisite corpse '#{name}' on to the editing phase."
+  end
+
+  bot.command(
+    :finaliseec,
+    description:
+      "Finalise an exquisite corpse and publish the result for the world to see.",
+    usage: ",finaliseec <name>"
+  ) do |event|
+    _command, name = event.content.split
+    ExquisiteCorpse.all(event.server)[name].finalise
+    "Finalised exquisite corpse '#{name}'."
+  end
+
+  bot.command(
+    :removeec,
+    description: "Remove an exquisite corpse. This can not be undone.",
+    usage: ",removeec <name>"
+  ) do |event|
+    _command, name = event.content.split
+    ExquisiteCorpse.all(event.server)[name].remove
+    "Removed exquisite corpse '#{name}'."
+  end
+
+  bot.ready do |event|
+    bot.servers.values.each do |server|
+      ExquisiteCorpse.all(server).values.each { |ec| ec.register bot }
+    end
+  end
+
+  bot.server_create do |event|
+    ExquisiteCorpse.all(event.server).values.each { |ec| ec.register bot }
+  end
+
   bot.run
 end
