@@ -1,7 +1,10 @@
 require "heimdallr/version"
 
+require "json"
 require "discordrb"
+require "http"
 require "sqlite3"
+require "open-uri"
 
 module Heimdallr
   bot = Discordrb::Commands::CommandBot.new token: ENV["DISCORD_BOT_TOKEN"], prefix: ","
@@ -64,6 +67,33 @@ module Heimdallr
 
   bot.message(start_with: "t!") do |event|
     event.respond "I'm terribly sorry, we don't have Tatsumaki here. Try `,help`."
+  end
+
+  bot.command(:say, description: "Get a pronunciation for a Danish word", usage: ",say <word>") do |event|
+    _command, word = event.content.split
+    return "Please provide a word. See `,help say`" unless word
+    url = "https://apicorporate.forvo.com/api2/v1.1/d6a0d68b18fbcf26bcbb66ec20739492/word-pronunciations/word/#{URI.encode_www_form_component word}/language/da/order/rate-desc"
+    begin
+      response = HTTP.timeout(5).get(url)
+      return "Got an error while querying Forvo API. Sorry!" unless response.status.success?
+      json = JSON.parse(response.body.to_s)
+      items = json["data"]["items"]
+      if items.empty?
+        "No entry found. Sorry!"
+      else
+        mp3_link = items[0]["realmp3"]
+        mp3_filename = "#{word}.mp3"
+        system("wget -O #{mp3_filename} #{mp3_link}")
+        file = File.open(mp3_filename)
+        event.attach_file file
+        sleep(5)
+        system("rm #{mp3_filename}")
+        "Found something :eyes:"
+      end
+    rescue HTTP::Error => exc
+      bot.log_exception exc
+      "Oof ouch, an error occurred. Please let sarna know."
+    end
   end
 
   bot.command(:faq, description: "Get a FAQ entry", usage: ",faq <topic>") do |event|

@@ -10,6 +10,7 @@ gem "pry"
 gem "discordrb",
   git: "https://github.com/swarley/discordrb.git",
   branch: "next"
+gem 'http'
 gem 'sqlite3', '~> 1.4', '>= 1.4.2'
 
 group :development do
