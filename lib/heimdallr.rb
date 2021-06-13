@@ -69,10 +69,11 @@ module Heimdallr
     event.respond "I'm terribly sorry, we don't have Tatsumaki here. Try `,help`."
   end
 
-  bot.command(:say, description: "Get a pronunciation for a Danish word", usage: ",say <word>") do |event|
-    _command, word = event.content.split
-    return "Please provide a word. See `,help say`" unless word
-    url = "https://apicorporate.forvo.com/api2/v1.1/d6a0d68b18fbcf26bcbb66ec20739492/word-pronunciations/word/#{URI.encode_www_form_component word}/language/da/order/rate-desc"
+  bot.command(:say, description: "Get a pronunciation for a Danish phrase", usage: ",say <phrase>") do |event|
+    _command, *phrase = *event.content.split
+    phrase = phrase.join(" ")
+    return "Please provide a phrase. See `,help say`" unless phrase
+    url = "https://apicorporate.forvo.com/api2/v1.1/d6a0d68b18fbcf26bcbb66ec20739492/word-pronunciations/word/#{URI.encode_www_form_component phrase}/language/da/order/rate-desc"
     begin
       response = HTTP.timeout(5).get(url)
       return "Got an error while querying Forvo API. Sorry!" unless response.status.success?
@@ -82,12 +83,11 @@ module Heimdallr
         "No entry found. Sorry!"
       else
         mp3_link = items[0]["realmp3"]
-        mp3_filename = "#{word}.mp3"
-        system("wget -O #{mp3_filename} #{mp3_link}")
+        mp3_filename = "#{phrase}.mp3"
+        system("wget -O '#{mp3_filename}' #{mp3_link}")
         file = File.open(mp3_filename)
         event.attach_file file
-        sleep(5)
-        system("rm #{mp3_filename}")
+        spawn("sleep 10 && rm '#{mp3_filename}'")
         "Found something :eyes:"
       end
     rescue HTTP::Error => exc
