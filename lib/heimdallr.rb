@@ -7,6 +7,15 @@ require "sqlite3"
 require "open-uri"
 
 module Heimdallr
+  def self.asciize_danish(s)
+    replacements = {
+      "æ" => "ae",
+      "ø" => "oe",
+      "å" => "aa"
+    }
+    s.gsub(Regexp.union(replacements.keys), replacements)
+  end
+
   bot = Discordrb::Commands::CommandBot.new token: ENV["DISCORD_BOT_TOKEN"], prefix: ","
 
   begin
@@ -50,9 +59,9 @@ module Heimdallr
 
   bot.member_join do |event|
     msg = <<~TEXT.strip
-      :postal_horn: Greetings and welcome, #{event.user.mention}.
-      Please, tell our moderators what your level of Danish is so that we may tag you accordingly.
-      If you wish to be notified for any upcoming lessons, you can also get a tag granted for that.
+      :postal_horn: Greetings and welcome, #{event.user.mention}!
+      How well do you speak Danish, good visitor?
+      Let us know if you wish to be notified of any upcoming lessons.
     TEXT
     sleep 10
     event.server.system_channel.send_message msg
@@ -79,16 +88,18 @@ module Heimdallr
       return "Got an error while querying Forvo API. Sorry!" unless response.status.success?
       json = JSON.parse(response.body.to_s)
       items = json["data"]["items"]
+      items.each { |item| puts "item's word: #{item["word"]}, phrase: #{phrase}" }
+      items.select! { |item| item["word"] == phrase }
       if items.empty?
-        "No entry found. Sorry!"
+        "No entry found. Apologies!"
       else
-        mp3_link = items[0]["realmp3"]
-        mp3_filename = "#{phrase}.mp3"
+        mp3_link = items.first["realmp3"]
+        mp3_filename = "#{asciize_danish phrase}.mp3"
         system("wget -O '#{mp3_filename}' #{mp3_link}")
         file = File.open(mp3_filename)
         event.attach_file file
         spawn("sleep 10 && rm '#{mp3_filename}'")
-        "Found something :eyes:"
+        ":palms_up_together:"
       end
     rescue HTTP::Error => exc
       bot.log_exception exc
