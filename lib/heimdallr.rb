@@ -7,6 +7,15 @@ require "sqlite3"
 require "open-uri"
 
 module Heimdallr
+  def self.asciize_danish(s)
+    replacements = {
+      "æ" => "ae",
+      "ø" => "oe",
+      "å" => "aa"
+    }
+    s.gsub(Regexp.union(replacements.keys), replacements)
+  end
+
   bot = Discordrb::Commands::CommandBot.new token: ENV["DISCORD_BOT_TOKEN"], prefix: ","
 
   begin
@@ -79,11 +88,13 @@ module Heimdallr
       return "Got an error while querying Forvo API. Sorry!" unless response.status.success?
       json = JSON.parse(response.body.to_s)
       items = json["data"]["items"]
+      items.each { |item| puts "item's word: #{item["word"]}, phrase: #{phrase}" }
+      items.select! { |item| item["word"] == phrase }
       if items.empty?
         "No entry found. Sorry!"
       else
-        mp3_link = items[0]["realmp3"]
-        mp3_filename = "#{phrase}.mp3"
+        mp3_link = items.first["realmp3"]
+        mp3_filename = "#{asciize_danish phrase}.mp3"
         system("wget -O '#{mp3_filename}' #{mp3_link}")
         file = File.open(mp3_filename)
         event.attach_file file
