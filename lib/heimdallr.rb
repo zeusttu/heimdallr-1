@@ -59,9 +59,9 @@ module Heimdallr
 
   bot.member_join do |event|
     msg = <<~TEXT.strip
-      :postal_horn: Greetings and welcome, #{event.user.mention}.
-      Please, tell our moderators what your level of Danish is so that we may tag you accordingly.
-      If you wish to be notified for any upcoming lessons, you can also get a tag granted for that.
+      :postal_horn: Greetings and welcome, #{event.user.mention}!
+      How well do you speak Danish, good visitor?
+      Let us know if you wish to be notified of any upcoming lessons.
     TEXT
     sleep 10
     event.server.system_channel.send_message msg
@@ -91,7 +91,7 @@ module Heimdallr
       items.each { |item| puts "item's word: #{item["word"]}, phrase: #{phrase}" }
       items.select! { |item| item["word"] == phrase }
       if items.empty?
-        "No entry found. Sorry!"
+        "No entry found. Apologies!"
       else
         mp3_link = items.first["realmp3"]
         mp3_filename = "#{asciize_danish phrase}.mp3"
@@ -99,7 +99,7 @@ module Heimdallr
         file = File.open(mp3_filename)
         event.attach_file file
         spawn("sleep 10 && rm '#{mp3_filename}'")
-        "Found something :eyes:"
+        ":palms_up_together:"
       end
     rescue HTTP::Error => exc
       bot.log_exception exc
