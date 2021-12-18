@@ -8,8 +8,8 @@ gem "rspec", "~> 3.0"
 gem "pry"
 
 gem "discordrb",
-  git: "https://github.com/swarley/discordrb.git",
-  branch: "next"
+  git: "https://github.com/shardlab/discordrb.git",
+  branch: "main"
 gem 'http'
 gem 'sqlite3', '~> 1.4', '>= 1.4.2'
 
