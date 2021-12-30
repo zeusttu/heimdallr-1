@@ -177,7 +177,7 @@ module Heimdallr
     ec = ExquisiteCorpse.new event.server, name
     ec.start participants
     ec.register bot
-    "Started dxquisite corpse '#{name}'."
+    "Started exquisite corpse '#{name}'."
   end
 
   bot.command(
