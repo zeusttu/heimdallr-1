@@ -1,3 +1,4 @@
+require "heimdallr/exquisite_corpse"
 require "heimdallr/version"
 
 require "json"
