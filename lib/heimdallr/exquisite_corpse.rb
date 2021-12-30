@@ -106,7 +106,7 @@ module Heimdallr
         end
         unless categories.one?
           names = @server.categories.map(&:name)
-          raise "Exquisit Corpse's channel category 'ec-#{@name}' not found in #{names}."
+          raise "Exquisite Corpse's channel category 'ec-#{@name}' not found in #{names}."
         end
 
         @category = categories.first
@@ -119,7 +119,7 @@ module Heimdallr
       result_channels = category.children.filter do |channel|
         channel.name == 'ec-result'
       end
-      raise "Exquisit Corpse's result channel '#{@name}.ec-result' not found." \
+      raise "Exquisite Corpse's result channel '#{@name}.ec-result' not found." \
         unless result_channels.one?
 
       result_channels.first
@@ -132,7 +132,7 @@ module Heimdallr
       end
       unless participant_roles.one?
         raise(
-          "Exquisit Corpse's participant role 'ec-#{@name}-participant' not found."
+          "Exquisite Corpse's participant role 'ec-#{@name}-participant' not found."
         )
       end
       participant_roles.first
@@ -143,7 +143,7 @@ module Heimdallr
       viewer_roles = @server.roles.filter do |role|
         role.name == "ec-#{@name}-viewer"
       end
-      raise "Exquisit Corpse's viewer role 'ec-#{@name}-viewer' not found." \
+      raise "Exquisite Corpse's viewer role 'ec-#{@name}-viewer' not found." \
         unless viewer_roles.one?
 
       viewer_roles.first
