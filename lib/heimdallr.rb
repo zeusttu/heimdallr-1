@@ -175,6 +175,9 @@ module Heimdallr
     usage: ",startec <name> <participant1> <participant2> ..."
   ) do |event|
     _command, name, *participants = event.content.split
+    if name.nil? || name.empty?
+      raise "Exquisite corpse should have a name."
+    end
     ec = ExquisiteCorpse.new event.server, name
     ec.start participants
     ec.register bot
