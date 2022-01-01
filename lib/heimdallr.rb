@@ -174,14 +174,20 @@ module Heimdallr
     description: "Start an exquisite corpse.",
     usage: ",startec <name> <participant1> <participant2> ..."
   ) do |event|
-    _command, name, *participants = event.content.split
-    if name.nil? || name.empty?
-      raise "Exquisite corpse should have a name."
+    begin
+      _command, name, *participants = event.content.split
+      if name.nil? || name.empty?
+        raise "Exquisite corpse should have a name."
+      end
+      ec = ExquisiteCorpse.new event.server, name
+      ec.start participants
+      ec.register bot
+    rescue Exception => exc
+      bot.log_exception exc
+      exc
+    else
+      "Started exquisite corpse '#{name}'."
     end
-    ec = ExquisiteCorpse.new event.server, name
-    ec.start participants
-    ec.register bot
-    "Started exquisite corpse '#{name}'."
   end
 
   bot.command(
@@ -190,9 +196,15 @@ module Heimdallr
       "Finish the writing phase of an exquisite corpse and proceed to the edit phase.",
     usage: ",proceedec <name>"
   ) do |event|
-    _command, name = event.content.split
-    ExquisiteCorpse.all(event.server)[name].enter_editing_phase
-    "Moved exquisite corpse '#{name}' on to the editing phase."
+    begin
+      _command, name = event.content.split
+      ExquisiteCorpse.all(event.server)[name].enter_editing_phase
+    rescue Exception => exc
+      bot.log_exception exc
+      exc
+    else
+      "Moved exquisite corpse '#{name}' on to the editing phase."
+    end
   end
 
   bot.command(
@@ -201,9 +213,15 @@ module Heimdallr
       "Finalise an exquisite corpse and publish the result for the world to see.",
     usage: ",finaliseec <name>"
   ) do |event|
-    _command, name = event.content.split
-    ExquisiteCorpse.all(event.server)[name].finalise
-    "Finalised exquisite corpse '#{name}'."
+    begin
+      _command, name = event.content.split
+      ExquisiteCorpse.all(event.server)[name].finalise
+    rescue Exception => exc
+      bot.log_exception exc
+      exc
+    else
+      "Finalised exquisite corpse '#{name}'."
+    end
   end
 
   bot.command(
@@ -211,9 +229,15 @@ module Heimdallr
     description: "Remove an exquisite corpse. This can not be undone.",
     usage: ",removeec <name>"
   ) do |event|
-    _command, name = event.content.split
-    ExquisiteCorpse.all(event.server)[name].remove
-    "Removed exquisite corpse '#{name}'."
+    begin
+      _command, name = event.content.split
+      ExquisiteCorpse.all(event.server)[name].remove
+    rescue Exception => exc
+      bot.log_exception exc
+      exc
+    else
+      "Removed exquisite corpse '#{name}'."
+    end
   end
 
   bot.ready do |event|
