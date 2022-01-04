@@ -174,10 +174,18 @@ module Heimdallr
     description: "Start an exquisite corpse.",
     usage: ",startec <name> <participant1> <participant2> ..."
   ) do |event|
+    success_msg = nil
     begin
       _command, name, *participants = event.content.split
+      warning = ""
       if name.nil? || name.empty?
         raise "Exquisite corpse should have a name."
+      elsif participants.uniq.length != participants.length
+        raise "Exquisite corpse should not have a duplicate participant."
+      elsif participants.nil? || participants.length < 2
+        raise "Exquisite corpse should have at least 2 participants."
+      elsif participants.length < 4
+        warning = " Please note that it's probably more fun with at least 4 participants."
       end
       ec = ExquisiteCorpse.new event.server, name
       ec.start participants
@@ -186,7 +194,7 @@ module Heimdallr
       bot.log_exception exc
       exc
     else
-      "Started exquisite corpse '#{name}'."
+      "Started exquisite corpse '#{name}' with #{participants.length} participants.#{warning}"
     end
   end
 
