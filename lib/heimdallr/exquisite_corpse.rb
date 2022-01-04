@@ -220,10 +220,33 @@ module Heimdallr
       channels = category.children
       role_names = ["ec-#{@name}-participant", "ec-#{@name}-viewer"]
       roles = @server.roles.filter { |role| role_names.include? role.name }
+      failures = []
 
-      roles.each { |role| role.delete reason: reason }
-      channels.each { |channel| channel.delete reason: reason }
-      category.delete reason: reason
+      roles.each do |role|
+        begin
+          role.delete reason: reason
+        rescue Exception => exc
+          failures.append "Failed to delete role `#{role.name}`: #{exc}"
+        end
+      end
+      channels.each do |channel|
+        begin
+          channel.delete reason: reason
+        rescue Exception => exc
+          failures.append "Failed to delete channel `#{channel.name}`: #{exc}"
+        end
+      end
+      begin
+        category.delete reason: reason
+      rescue Exception => exc
+        failures.append "Failed to delete channel category `#{category.name}`: #{exc}"
+      end
+
+      if failures.length != 0
+        failures.append "Exquisite corpse `#{@name}` was not removed from the database because of these errors."
+        raise failures.join "\n"
+      end
+
       @@all.delete @name
     end
   end
