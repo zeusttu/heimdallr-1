@@ -239,7 +239,10 @@ module Heimdallr
   ) do |event|
     begin
       _command, name = event.content.split
-      ExquisiteCorpse.all(event.server)[name].remove
+      raise "You forgot to specify the name of the exquisite corpse to remove." if name.nil? || name.length == 0
+      corpse = ExquisiteCorpse.all(event.server)[name]
+      raise "Exquisite corpse `#{name}` not found." if corpse.nil?
+      corpse.remove
     rescue Exception => exc
       bot.log_exception exc
       exc
