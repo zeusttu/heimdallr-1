@@ -194,7 +194,7 @@ module Heimdallr
       bot.log_exception exc
       exc
     else
-      "Started exquisite corpse '#{name}' with #{participants.length} participants.#{warning}"
+      "Started exquisite corpse `#{name}` with #{participants.length} participants.#{warning}"
     end
   end
 
@@ -211,7 +211,7 @@ module Heimdallr
       bot.log_exception exc
       exc
     else
-      "Moved exquisite corpse '#{name}' on to the editing phase."
+      "Moved exquisite corpse `#{name}` on to the editing phase."
     end
   end
 
@@ -228,7 +228,7 @@ module Heimdallr
       bot.log_exception exc
       exc
     else
-      "Finalised exquisite corpse '#{name}'."
+      "Finalised exquisite corpse `#{name}`."
     end
   end
 
@@ -247,7 +247,7 @@ module Heimdallr
       bot.log_exception exc
       exc
     else
-      "Removed exquisite corpse '#{name}'."
+      "Removed exquisite corpse `#{name}`."
     end
   end
 
