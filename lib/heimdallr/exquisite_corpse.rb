@@ -225,6 +225,7 @@ module Heimdallr
       roles.each do |role|
         begin
           role.delete reason: reason
+        rescue Discordrb::Errors::UnknownRole
         rescue Exception => exc
           failures.append "Failed to delete role `#{role.name}`: #{exc}"
         end
@@ -232,12 +233,14 @@ module Heimdallr
       channels.each do |channel|
         begin
           channel.delete reason: reason
+        rescue Discordrb::Errors::UnknownChannel
         rescue Exception => exc
           failures.append "Failed to delete channel `#{channel.name}`: #{exc}"
         end
       end
       begin
         category.delete reason: reason
+      rescue Discordrb::Errors::UnknownChannel
       rescue Exception => exc
         failures.append "Failed to delete channel category `#{category.name}`: #{exc}"
       end
