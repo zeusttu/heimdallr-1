@@ -250,7 +250,7 @@ module Heimdallr
         raise failures.join "\n"
       end
 
-      @@all.delete @name
+      @@all[@server.id].delete @name
     end
   end
 end
